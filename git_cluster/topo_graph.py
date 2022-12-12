@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.optimize import linprog
 
+# Use scipy to calculate wasserstein distance 
+import scipy.stats
 
 def wasserstein_distance(p, q):
     """Compute Wasserstein distance by linear programming
@@ -9,22 +11,23 @@ def wasserstein_distance(p, q):
     """
     p = p / p.sum()
     q = q / q.sum()
-    D = np.sqrt(np.square(p[:, None] - q[None, :]))
+    ## D = np.sqrt(np.square(p[:, None] - q[None, :]))
 
-    A_eq = []
-    for i in range(len(p)):
-        A = np.zeros_like(D)
-        A[i, :] = 1
-        A_eq.append(A.reshape(-1))
-    for i in range(len(q)):
-        A = np.zeros_like(D)
-        A[:, i] = 1
-        A_eq.append(A.reshape(-1))
-    A_eq = np.array(A_eq)
-    b_eq = np.concatenate([p, q])
-    D = D.reshape(-1)
-    result = linprog(D, A_eq=A_eq[:-1], b_eq=b_eq[:-1])
-    return result.fun
+    ## A_eq = []
+    ## for i in range(len(p)):
+    ##     A = np.zeros_like(D)
+    ##     A[i, :] = 1
+    ##     A_eq.append(A.reshape(-1))
+    ## for i in range(len(q)):
+    ##     A = np.zeros_like(D)
+    ##     A[:, i] = 1
+    ##     A_eq.append(A.reshape(-1))
+    ## A_eq = np.array(A_eq)
+    ## b_eq = np.concatenate([p, q])
+    ## D = D.reshape(-1)
+    ## result = linprog(D, A_eq=A_eq[:-1], b_eq=b_eq[:-1])
+    ## return result.fun
+    return scipy.stats.wasserstein_distance(p, q)
 
 
 class TopoGraph:
